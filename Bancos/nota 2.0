@@ -1,0 +1,288 @@
+    
+drop user TCC2 cascade;
+
+-- Usuário TCC
+
+CREATE USER TCC2 IDENTIFIED BY A12345;
+ALTER USER TCC2 ACCOUNT UNLOCK;
+GRANT ALL PRIVILEGES TO TCC2;
+ 
+-- Curso 
+  
+ CREATE SEQUENCE TCC2.SEQIDCurso
+ INCREMENT BY 1
+ START WITH 1
+ NOMAXVALUE
+ NOMINVALUE 
+ NOCACHE
+ NOCYCLE; 
+ 
+ create table TCC2.tbCurso(
+ IDCurso integer not null,
+ NomeCurso varchar2(50) not null,
+ AbreviaturaCurso varchar(3) not null,
+ AICurso VARCHAR(1) not null,
+ DataDeExclusaoCurso VARCHAR(30),
+ constraint pk_IDCurso primary key (IDCurso));
+ 
+ 
+ insert into TCC2.tbCurso (IDCurso, NomeCurso, AbreviaturaCurso, AICurso) values (TCC2.SEQIDCurso.NEXTVAL,'Núcleo Comum', 'NUC','A');
+ insert into TCC2.tbCurso (IDCurso, NomeCurso, AbreviaturaCurso, AICurso) values (TCC2.SEQIDCurso.NEXTVAL,'Informática', 'INF','A');
+ insert into TCC2.tbCurso (IDCurso, NomeCurso, AbreviaturaCurso, AICurso) values (TCC2.SEQIDCurso.NEXTVAL,'Edificações', 'EDF','A');
+ insert into TCC2.tbCurso (IDCurso, NomeCurso, AbreviaturaCurso, AICurso) values (TCC2.SEQIDCurso.NEXTVAL,'Telecomunicações', 'TEL','I');
+ insert into TCC2.tbCurso (IDCurso, NomeCurso, AbreviaturaCurso, AICurso) values (TCC2.SEQIDCurso.NEXTVAL,'Eletrônica','EEL','I');
+ 
+ -- Matéria 
+ 
+CREATE SEQUENCE TCC2.SEQIDMATERIA
+ INCREMENT BY 1
+ START WITH 1
+ NOMAXVALUE
+ NOMINVALUE 
+ NOCACHE
+ NOCYCLE; 
+ 
+ create table TCC2.tbMateria(
+ IDMateria integer not null, 
+ NomeMateria varchar2(20) not null,
+ QtdAula NUMBER not null,
+ FKCursoMateria integer not null,
+ AIMateria VARCHAR(1) not null,
+ constraint pk_IDMateria primary key (IDMateria),
+ constraint fk_CursoMateria foreign key (FKCursoMateria)
+ references TCC2.tbCurso(IDCurso));
+ 
+
+ 
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Inglês',2, 1, 'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Sociologia',3, 1, 'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Português',3, 1, 'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Física',2,1, 'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Química',2,1,'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Biologia',2,1,'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Geografia',2,1, 'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'História',2,1,'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Estatistica',1,1,'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Matematica',3,1,'A');
+ insert into TCC2.tbMateria (IDMateria, NomeMateria, QtdAula,FKCursoMateria, AIMateria) values (TCC2.SEQIDMATERIA.nextval,'Filosofia',1, 1, 'I');
+
+
+  create sequence TCC2.SEQIDFunc
+ INCREMENT BY 1
+ START WITH 10000
+ NOMAXVALUE
+ NOMINVALUE 
+ NOCACHE
+ NOCYCLE; 
+ 
+ create table TCC2.tbFunc(
+ IDFunc integer not null,
+ NomeFunc varchar2(100) not null,
+ CPFFunc varchar(20) not null unique,
+ AIFunc varchar2(1) NOT NULL,
+constraint pk_IDFunc primary key (IDFunc)
+);
+
+  
+ insert into TCC2.tbFunc values (TCC2.SEQIDFunc.nextval,'Edineia','111-111-111-11','A' );
+ insert into TCC2.tbFunc values (TCC2.SEQIDFunc.nextval,'Leandro','222-222-222-22','A');
+ insert into TCC2.tbFunc values (TCC2.SEQIDFunc.nextval,'Alberto','333-333-333-33','A');
+   select * from TCC2.tbfunc;
+ 
+ 
+
+-- Professor e Materia
+CREATE SEQUENCE TCC2.SEQIDPM
+START WITH 110000
+INCREMENT BY 1
+NOMINVALUE NOMAXVALUE NOCYCLE NOCACHE;
+
+create table TCC2.tbProfMate(
+IDProfMate integer not null,
+FKIDMateria integer not null,
+FKIDFunc integer not null,
+NomeRelacionamento varchar(50) not null,
+constraint PK_IDProfMate primary key (IDProfMate),
+constraint FK_IDMateria_ProfMate foreign key (FKIDMateria)
+references TCC2.tbMateria(IDMateria),
+constraint FK_FKIDFunc_ProfMate foreign key (FKIDFunc)
+references TCC2.tbFunc (IDFunc));
+
+insert into TCC2.TBPROFMATE (IDPROFMATE,FKIDMATERIA,FKIDFUNC, NOMERELACIONAMENTO) values(TCC2.SEQIDPM.NEXTVAL,1,10000, 'Edineia - Inglês');
+insert into TCC2.TBPROFMATE (IDPROFMATE,FKIDMATERIA,FKIDFUNC, NOMERELACIONAMENTO) values(TCC2.SEQIDPM.NEXTVAL,1,10001, 'Leandro - Inglês');
+insert into TCC2.tbprofmate (IDPROFMATE,FKIDMATERIA,FKIDFUNC, NOMERELACIONAMENTO) values(TCC2.SEQIDPM.NEXTVAL,3,10002, 'Alberto - Português');
+
+
+
+ -- Turma
+
+ create sequence TCC2.SEQIDTURMA
+ INCREMENT BY 1
+ START WITH 1
+ NOMAXVALUE
+ NOMINVALUE 
+ NOCACHE
+ NOCYCLE;
+ 
+ create table TCC2.tbTurma(
+ IDTurma integer not null,
+ FKCursoTurma integer not null,
+ AnoTurma varchar(1) not null,
+ NomeTurma varchar(1) not null,
+ PeriodoTurma varchar(1) not null,
+ CompletoTurma varchar(8) not null unique,
+ AITurma VARCHAR(1) not null,
+ DataDeExclusaoTurma VARCHAR(30),
+ constraint pk_IDTurma primary key (IDTurma),
+ constraint fk_FKCursoTurma foreign key (FKCursoTurma)
+ references TCC2.tbCurso (IDCurso));
+ 
+ select * from TCC2.tbturma;
+ 
+insert into TCC2.tbTurma (IDTurma, FKCursoTurma, AnoTurma, NomeTurma, PeriodoTurma, CompletoTurma, AITurma) values (TCC2.SEQIDTURMA.NEXTVAL, 2,'1','A','T','INF1AT','A');
+insert into TCC2.tbTurma (IDTurma, FKCursoTurma, AnoTurma, NomeTurma, PeriodoTurma, CompletoTurma, AITurma) values (TCC2.SEQIDTURMA.NEXTVAL, 2, '1', 'B', 'T', 'INF1BT', 'A');
+insert into TCC2.tbTurma (IDTurma, FKCursoTurma, AnoTurma, NomeTurma, PeriodoTurma, CompletoTurma, AITurma) values (TCC2.SEQIDTURMA.NEXTVAL, 3,'2','B', 'M','EDF2BM','I');
+
+CREATE SEQUENCE TCC2.SEQIDPMT
+START WITH 200  INCREMENT BY 1 NOMINVALUE NOMAXVALUE NOCYCLE NOCACHE;
+
+create table TCC2.tbProfMateTurma(
+IDProfMateTurma integer not null,
+FKIDProfMate integer not null,
+FKIDTurma integer not null,
+constraint PK_IDProfMateria primary key (IDProfMateTurma),
+constraint FK_FKIDProfMate foreign key (FKIDProfMate)
+references TCC2.tbProfMate(IDProfMate),
+constraint FK_FKIDTurma foreign key (FKIDTurma)
+references TCC2.tbTurma (IDTurma));
+
+
+INSERT INTO TCC2.TBPROFMATETURMA (IDPROFMATETURMA,FKIDPROFMATE,FKIDTURMA) VALUES (TCC2.SEQIDPMT.NEXTVAL,110000,1);
+INSERT INTO TCC2.TBPROFMATETURMA (IDPROFMATETURMA,FKIDPROFMATE,FKIDTURMA) VALUES (TCC2.SEQIDPMT.NEXTVAL,110001,2);
+INSERT INTO TCC2.TBPROFMATETURMA (IDPROFMATETURMA,FKIDPROFMATE,FKIDTURMA) VALUES (TCC2.SEQIDPMT.NEXTVAL,110002,3);
+
+ create sequence TCC2.seqrmaluno
+ increment by 15
+ start with 25000
+ nominvalue
+ nomaxvalue
+ nocache
+ nocycle;
+ 
+create table TCC2.tbAluno(
+RMAluno integer not null,
+NomeAluno varchar2(75) not null,
+CPFAluno varchar(15) not null unique,
+EmailAluno varchar2(50) not null unique,
+AIAluno VARCHAR(1) not null,
+DTAluno VARCHAR2(15) not null,
+FKTurmaAluno integer not null,
+constraint pk_RMAluno primary key (RMAluno),
+constraint fk_FKTurmaAluno foreign key (FKTurmaAluno)
+references TCC2.tbTurma (IDTurma));
+
+select * from TCC2.tbaluno;
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Osvaldo Pereira dos Santos', '900-807-111-25', 'osvaldo@teste.com','A','07/10/2002',1);
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Fulano da Silva Cruz', '123-587-111-25', 'fulano@teste.com','A','07/05/2002',1);
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Cicrano da Silva Sauro', '674-892-091-55', 'cicrano@teste.com','A','30/12/2002',1);
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Giovana Marinai', '847-563-829-23', 'giovana@teste.com','A','13/07/2001',2);
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Christian Santos Viana', '674-809-478-13', 'christian@teste.com','A','21/03/2001',2);
+ insert into TCC2.tbAluno values (TCC2.seqrmaluno.nextval, 'Jhonathan Santos', '690-785-638-13', 'jhow@teste.com','A','17/05/2001',2);
+
+  create or replace view TCC2.vw_Aluno as
+ select alu.RMAluno as RM,alu.NomeAluno as Nome,alu.CPFALUNO as cpf,alu.EMAILALUNO AS EMAIL,alu.DTALUNO AS DATA_NASCIMENTO,t.COMPLETOTURMA AS SALA
+ from TCC2.tbAluno alu
+ inner join TCC2.tbTurma t on t.IDTurma=alu.FKTurmaAluno;
+
+
+
+--MINHAS ALTERAÇÕES----------------------------------------------------------------------------------------
+
+
+CREATE SEQUENCE TCC2.SEQIDPMTA
+START WITH 10
+INCREMENT BY 2 NOMINVALUE NOMAXVALUE NOCACHE NOCYCLE;
+
+create table TCC2.tbpmtaluno(
+idpmtalu integer not null,
+fkidpmt not null,
+fkrmaluno not null,
+constraint pk_idpmtaluno primary key (idpmtalu),
+constraint fk_idpmt_conexao foreign key (fkidpmt)
+references TCC2.TBPROFMATETURMA (idprofmateturma),
+constraint fk_rmaluno_conexao foreign key (fkrmaluno)
+references TCC2.tbaluno (rmaluno));
+ 
+ --TOMAR CUIDADO COM AS CONCORDANCIAS DE SALAS COM PROFESSORES E ALUNOS
+ select *from tcc2.tbaluno;
+ select *from tcc2.tbprofmateturma;
+ select *from tcc2.tbturma;
+ INSERT INTO TCC2.TBPMTALUNO VALUES (TCC2.SEQIDPMTA.NEXTVAL,201,25060);
+ INSERT INTO TCC2.TBPMTALUNO VALUES (TCC2.SEQIDPMTA.NEXTVAL,200,25000);
+ 
+ 
+ 
+ CREATE TABLE TCC2.TBAVALIACAO (
+ IDAVA INTEGER NOT NULL,
+ DESCAVA VARCHAR2(50) NOT NULL,
+ CONSTRAINT PK_IDAVALIACAO PRIMARY KEY (IDAVA));
+ 
+ INSERT INTO TCC2.TBAVALIACAO VALUES (1, 'PAT');
+ INSERT INTO TCC2.TBAVALIACAO VALUES (2, 'PEM');
+ INSERT INTO TCC2.TBAVALIACAO VALUES (3, 'TRABALHO');
+ INSERT INTO TCC2.TBAVALIACAO VALUES (4, 'PARTICIPAÇÃO');
+ 
+ CREATE TABLE TCC2.TBTRIMESTRE(
+ IDTRI INTEGER NOT NULL,
+ TRIMESTRE VARCHAR2(1) NOT NULL,
+ CONSTRAINT PK_IDTRIMESTRE PRIMARY KEY (IDTRI));
+ 
+ INSERT INTO TCC2.TBTRIMESTRE VALUES (1,'1');
+ INSERT INTO TCC2.TBTRIMESTRE VALUES (2,'2');
+ INSERT INTO TCC2.TBTRIMESTRE VALUES (3,'3');
+
+CREATE SEQUENCE TCC2.SEQIDNOTA
+START WITH 2 INCREMENT BY 1 NOMINVALUE NOMAXVALUE NOCACHE NOCYCLE;
+
+ create table tcc2.tbnota (
+ idnota integer not null,
+ pmtalu integer not null,
+ idtri integer not null,
+ idava integer not null,
+ nota number(3,1),
+ constraint pk_idnota primary key (idnota),
+ constraint fk_ProfMateTurmaAluno foreign key (pmtalu)
+ references tcc2.tbpmtaluno (idpmtalu),
+ constraint fk_idtrimestre foreign key (idtri)
+ references tcc2.tbtrimestre (idtri),
+ constraint fk_idavaliacao foreign key (idava)
+ references tcc2.tbavaliacao (idava));
+ 
+ INSERT INTO TCC2.TBNOTA (IDNOTA,PMTALU,IDTRI,IDAVA,NOTA) VALUES (TCC2.SEQIDNOTA.NEXTVAL,10,1,2,'9'); 
+ INSERT INTO TCC2.TBNOTA (IDNOTA,PMTALU,IDTRI,IDAVA,NOTA) VALUES (TCC2.SEQIDNOTA.NEXTVAL,10,1,1,'8'); 
+ INSERT INTO TCC2.TBNOTA (IDNOTA,PMTALU,IDTRI,IDAVA,NOTA) VALUES (TCC2.SEQIDNOTA.NEXTVAL,10,1,3,'7,5');
+ INSERT INTO TCC2.TBNOTA (IDNOTA,PMTALU,IDTRI,IDAVA,NOTA) VALUES (TCC2.SEQIDNOTA.NEXTVAL,10,1,4,'4');
+ 
+ CREATE OR REPLACE VIEW TCC2.VW_NOTA AS 
+ SELECT PMTA.IDPMTALU as codigo, N.IDTRI AS TRIMESTRE, T.COMPLETOTURMA AS SALA,ALU.RMALUNO AS RM,ALU.NOMEALUNO AS ALUNO,AVA.DESCAVA AS AVALIACAO,N.NOTA,PM.NOMERELACIONAMENTO AS PROFESSOR_MATERIA FROM TCC2.TBNOTA N
+ INNER JOIN TCC2.TBAVALIACAO AVA ON AVA.IDAVA=N.IDAVA
+ INNER JOIN TCC2.TBPMTALUNO PMTA ON PMTA.IDPMTALU=N.PMTALU
+ INNER JOIN TCC2.TBALUNO ALU ON ALU.RMALUNO=PMTA.FKRMALUNO
+ INNER JOIN TCC2.TBPROFMATETURMA PMT ON PMT.IDPROFMATETURMA=PMTA.FKIDPMT
+ INNER JOIN TCC2.TBTURMA T ON T.IDTURMA=PMT.FKIDTURMA 
+ INNER JOIN TCC2.TBPROFMATE PM ON PM.IDPROFMATE=FKIDPROFMATE
+ ;
+ select *from tcc2.vw_nota;
+ create or replace view tcc2.vw_media_PT1 as
+ --EX
+ select avg(nota) as media from tcc2.vw_nota where codigo=10 and TRIMESTRE=1;
+ 
+ --usei o 10 como exemplo
+ CREATE OR REPLACE VIEW TCC2.vw_media_PT1 as
+ select CODIGO, rm, ALUNO, (select avg(nota) from tcc2.vw_nota where codigo=10 and trimestre=1) as media, PROFESSOR_MATERIA from tcc2.vw_nota;
+ 
+ 
+ create or replace view tcc2.vw_media_pt2 as
+ select distinct(codigo),rm,ALUNO,MEDIA, PROFESSOR_MATERIA from tcc2.vw_media_pt1 ;
+ 
+ 
