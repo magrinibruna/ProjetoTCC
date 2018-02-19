@@ -128,3 +128,15 @@ C:\Users\carol\Desktop\Bruna\Projetos\Visual Studio 2013\TCC\TCC5.0\obj\x86\Debu
 C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\TCC5.0.exe.config
 C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5.0.exe
 C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5.0.pdb
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\TCC5.0.exe
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\TCC5.0.pdb
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\MaterialSkin.dll
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\Oracle.DataAccess.dll
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\bin\x86\Debug\Oracle.ManagedDataAccess.dll
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5.0.csprojResolveAssemblyReference.cache
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5._0.Form1.resources
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5._0.GUI.frmOperacional.resources
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5._0.GUI.frmProfessor.resources
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5._0.GUI.frmTatico.resources
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5._0.Properties.Resources.resources
+C:\Users\carol\Desktop\Bruna\Projetos\C#\TCC\TCC5.0\obj\x86\Debug\TCC5.0.csproj.GenerateResource.Cache

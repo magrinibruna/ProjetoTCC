@@ -239,60 +239,84 @@ namespace TCC5._0.GUI
             }
             else
             {
+                    BLL.BLLAluno objBLLAluno = new BLL.BLLAluno();
 
-                BLL.BLLAluno objBLLAluno = new BLL.BLLAluno();
+                    DataTable tAlunoRM = objBLLAluno.BLLConsultaRMAluno(mtxtRMAluno.Text);
+                    DataGridView dgvAlunoRM = new DataGridView();
+                    dgvAlunoRM.DataSource = tAlunoRM;
 
-                DataTable tAlunoRM = objBLLAluno.BLLConsultaRMAluno(mtxtRMAluno.Text);
-                DataGridView dgvAlunoRM = new DataGridView();
-                dgvAlunoRM.DataSource = tAlunoRM;
-
-                DataTable tAlunoCPF = objBLLAluno.BLLConsultaCPFAluno(mtxtCPFAluno.Text);
-                DataGridView dgvAlunoCPF = new DataGridView();
-                dgvAlunoCPF.DataSource = tAlunoCPF;
-
-                if ((tAlunoRM.Rows.Count == 0) && tAlunoCPF.Rows.Count == 0) 
-                {
-                    if (txtDiretorio.Text == "")
+                    if (ValidarCPF(mtxtCPFAluno.Text))
                     {
-                        MessageBox.Show("Selecione uma Imagem");
+                        DataTable tAlunoCPF = objBLLAluno.BLLConsultaCPFAluno(mtxtCPFAluno.Text);
+                        DataGridView dgvAlunoCPF = new DataGridView();
+                        dgvAlunoCPF.DataSource = tAlunoCPF;
+
+                        if ((tAlunoRM.Rows.Count == 0) && tAlunoCPF.Rows.Count == 0)
+                        {
+                            if (txtDiretorio.Text == "")
+                            {
+                                MessageBox.Show("Selecione uma Imagem");
+                            }
+                            else
+                            {
+                                string DNAluno = mtxtDTAluno.Text;
+                                string ValidacaoDeData = DNAluno.Substring(6, 4);
+                                int AnoDeNascimento = Convert.ToInt32(ValidacaoDeData);
+
+                                //não está automático, pegando o ano atual
+                                if ((2018 - AnoDeNascimento > 150) || (2018 - AnoDeNascimento <= 0))
+                                {
+                                    MessageBox.Show("Ano Inválido");
+                                }
+                                else
+                                {
+                                    if (validaData(mtxtDTAluno.Text))
+                                    {
+                                        BLL.BLLTurma objBLLTurma = new BLL.BLLTurma();
+                                        BLL.BLLLogin objBLLLogin = new BLL.BLLLogin();
+
+                                        DataTable t = objBLLTurma.BLLConsultaCompletoTurmaCurso(cbTurmaAluno.Text);
+
+                                        DataGridView dgv = new DataGridView();
+                                        dgv.DataSource = t;
+
+                                        string IDTurma = t.Rows[0][0].ToString();
+
+                                        objBLLAluno.BLLCadastraAluno(mtxtRMAluno.Text, txtNomeAluno.Text, mtxtCPFAluno.Text, txtEmailAluno.Text, "A", mtxtDTAluno.Text, IDTurma);
+                                        objBLLLogin.BLLCadastroLogin(mtxtRMAluno.Text, "123456", "3");
+
+
+                                        GUICadastraFoto();
+                                        //Foto();
+                                        MessageBox.Show("Aluno Cadastrado!");
+                                        LimparCamposAlunos();
+                                        GUIConsultaAlunoAtivo();
+                                    }
+
+                                    MessageBox.Show("Data Inválida");
+                                }
+                            }
+
+
+                        }
+                        else if ((tAlunoRM.Rows.Count == 0) && (tAlunoCPF.Rows.Count != 0))
+                        {
+                            string RMAluno = tAlunoCPF.Rows[0][0].ToString();
+                            MessageBox.Show("CPF Já Cadastrado no Aluno de RM " + RMAluno);
+                            mtxtCPFAluno.Focus();
+                        }
+                        else
+                        {
+                            MessageBox.Show("RM Já Cadastrado");
+                            mtxtRMAluno.Focus();
+                        }
                     }
                     else
                     {
-                        BLL.BLLTurma objBLLTurma = new BLL.BLLTurma();
-                        BLL.BLLLogin objBLLLogin = new BLL.BLLLogin();
-
-                        DataTable t = objBLLTurma.BLLConsultaCompletoTurmaCurso(cbTurmaAluno.Text);
-
-                        DataGridView dgv = new DataGridView();
-                        dgv.DataSource = t;
-
-                        string IDTurma = t.Rows[0][0].ToString();
-
-                        objBLLAluno.BLLCadastraAluno(mtxtRMAluno.Text, txtNomeAluno.Text, mtxtCPFAluno.Text, txtEmailAluno.Text, "A", mtxtDTAluno.Text, IDTurma);
-                        objBLLLogin.BLLCadastroLogin(mtxtRMAluno.Text, "123456", "3");
-
-
-                        GUICadastraFoto();
-                        //Foto();
-                        MessageBox.Show("Aluno Cadastrado!");
-                        LimparCamposAlunos();
-                        GUIConsultaAlunoAtivo();
+                        MessageBox.Show("CPF Inválido");
                     }
-
-
                 }
-                else if ((tAlunoRM.Rows.Count == 0) && (tAlunoCPF.Rows.Count != 0))
-                {
-                    string RMAluno = tAlunoCPF.Rows[0][0].ToString();
-                    MessageBox.Show("CPF Já Cadastrado no Aluno de RM " + RMAluno);
-                    mtxtCPFAluno.Focus();
-                }
-                else
-                {
-                    MessageBox.Show("RM Já Cadastrado");
-                    mtxtRMAluno.Focus();
-                }
-            }
+            
         }
 
 
@@ -484,11 +508,18 @@ namespace TCC5._0.GUI
             }
             else
             {
-                objBLLFunc.BLLCadastraProfessor(mtxtCodigoProfessor.Text, txtNomeProfessor.Text, mtxtCPFProfessor.Text, "A");
-                objBLLLogin.BLLCadastroLogin(mtxtCodigoProfessor.Text, "abcdef", "2");
-                MessageBox.Show("Professor Cadastrado");
-                LimparCamposProfessor();
-                GUIConsultaAtivoProfessor();
+                if (ValidarCPF(mtxtCPFProfessor.Text))
+                {
+                    objBLLFunc.BLLCadastraProfessor(mtxtCodigoProfessor.Text, txtNomeProfessor.Text, mtxtCPFProfessor.Text, "A");
+                    objBLLLogin.BLLCadastroLogin(mtxtCodigoProfessor.Text, "abcdef", "2");
+                    MessageBox.Show("Professor Cadastrado");
+                    LimparCamposProfessor();
+                    GUIConsultaAtivoProfessor();
+                }
+                else
+                {
+                    MessageBox.Show("CPF Inválido");
+                }
             }
 
 
@@ -2127,6 +2158,80 @@ namespace TCC5._0.GUI
         }
 
                                                            //Outros
+
+        //Validação de COF
+       public static bool ValidarCPF(string CPF)
+        {
+            string valor = CPF.Replace("-", "");
+
+           if(valor.Length != 11)
+               return false;
+
+           bool igual = true;
+
+           for(int i = 1; i < 11 && igual; i++)
+               if(valor[i] != valor[0])
+                   igual = false;
+
+           if(igual || valor == "12345678909")
+               return false;
+
+           int[] numeros = new int[11];
+
+           for(int i = 0; i < 11; i++)
+               numeros[1] = int.Parse(valor[i].ToString());
+
+           int soma = 0;
+
+           for(int i = 0; i < 9; i++)
+               soma += (10 - i) * numeros[i];
+
+           int resultado = soma % 11;
+           
+           if(resultado == 1 || resultado == 0)
+           {
+               if(numeros[9] != 0)
+                   return false;
+           }
+           else 
+               if(numeros[9] != 11 - resultado)
+               return false;
+
+           soma = 0;
+
+           for(int i = 0; i < 10; i++)
+
+               soma += (11 - i) * numeros[i];
+
+           resultado = soma % 11;
+
+           if(resultado == 1 || resultado == 0){
+               if(numeros[10] != 0)
+                   return false;
+           }
+
+           else if(numeros[10] != 11 - resultado)
+               return false;
+
+           return true;
+
+        }
+
+        //Validar Data
+       private static Boolean validaData(String data)
+       {
+
+           DateTime result;
+
+           if (DateTime.TryParse(data, out result))
+
+               return true;
+
+           else
+
+               return false;
+
+       }
 
         //Sair
         private void sairToolStripMenuItem1_Click(object sender, EventArgs e)
